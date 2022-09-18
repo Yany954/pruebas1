@@ -12,58 +12,61 @@ import javax.swing.JOptionPane;
  * @author yanyg
  */
 public class InterfazRegistro extends javax.swing.JFrame {
-
+    String encabezado ="Codigo\tNombre\tTipoEmpleado\tAntigüedad\n";
     /**
      * Creates new form InterfazRegistro
      */
     public InterfazRegistro() {
         initComponents();
-        txtRegistrados.setText("\tCodigo\t Nombre\t Tipo empleado\t Antiguedad");
+        txtRegistrados.setText(encabezado);
     }
-    
-    public void registrar(){
-        String nombre=txtNombre.getText();
-        Integer cod=Integer.parseInt(txtCodigo.getText());
-        Integer tipoIndex=(int) jCmbTipo.getSelectedItem();
-        Integer meses = Integer.parseInt(txtAntiguedad.getText());
-        String tipo;
-        try{
-            if(tipoIndex == 0){
-                tipo="Empleado de planta";
-            }else{
-                tipo="Empleado de termino fijo";
+
+    public void registrar() {
+        try {
+            String nombre = txtNombre.getText();
+            String cod = txtCodigo.getText();
+            int tipoIndex = jCmbTipo.getSelectedIndex();
+            String meses = txtAntiguedad.getText();
+            if("Ingrese numero de identidifación".equals(cod)
+                    || cod.isEmpty()){
+                JOptionPane.showMessageDialog(rootPane, "Código vacío");
+            }else if (contieneLetra(cod) 
+                    || limiteCodigo(cod)){
+                JOptionPane.showMessageDialog(rootPane, "Código incorrecto "
+                        + "\n" + "valores entre 001 y 999");
+            }else if ("Ingrese nombre del empleado".equals(nombre)
+                    || nombre.isEmpty()){
+                JOptionPane.showMessageDialog(rootPane, "Nombre vacío");
+            }else if (contieneDigito(nombre) || limiteNombre(nombre)){
+                JOptionPane.showMessageDialog(rootPane, "Nombre incorrecto "
+                        + "\n" + "Letras entre 3 y 30 \n" + "Sin números");
+            }else if (tipoIndex == 0){
+                JOptionPane.showMessageDialog(rootPane, "Seleccione el tipo de empleado");
+            }else if (" Meses que lleva trabajando".equals(meses)
+                    || meses.isEmpty()){
+                JOptionPane.showMessageDialog(rootPane, "Antigüedad vacía");
+            }else if (contieneLetra(cod) 
+                    || limiteAntiguedad(cod)){
+                JOptionPane.showMessageDialog(rootPane, "Antigüedad incorrecta "
+                        + "\n" + "valores entre 1 y 600");
+            }                     
+                  
+            String tipo = "";
+            if (tipoIndex == 1) {
+                tipo = "Planta";
+            } else if(tipoIndex == 2){
+                tipo = "Termino fijo";
             }
-            if(nombre.isEmpty()){
-                JOptionPane.showMessageDialog(rootPane, "Nombre vacio");
-            }
-            else if(nombre.length()>=30 && nombre.length()<=3){
-                JOptionPane.showMessageDialog(rootPane, "Cantidad de caracteres invalidos");
-            }
-            else if(contieneDigito(nombre)){
-                JOptionPane.showMessageDialog(rootPane, "Nombre contiene algun digito");
-            }
-            /*
-            //el if que registra si los campos estan bien
-            if(nombre.length()<=30 && nombre.length()>=3 || !nombre.isEmpty()){
-                if(cod > 000 && cod <= 999 || cod!=null){
-                    if(meses > 0 && meses <= 600 || meses!=null){
-                        String text=cod+"\t"+nombre+"\t"+tipo+"\t"+meses;
-                        txtRegistrados.append(text);
-                    } else{
-                        JOptionPane.showMessageDialog(rootPane, "Tiempo en meses invalido");
-                    }
-                }else{
-                    JOptionPane.showMessageDialog(rootPane, "Codigo invalido");
-                }
-            }else{
-                JOptionPane.showMessageDialog(rootPane, "Nombre invalido");
-            }*/
-        } catch(Exception e){
-            JOptionPane.showMessageDialog(rootPane, e.getMessage());
+            Empleado empleado = new Empleado(cod, nombre, tipo, meses);
+            txtRegistrados.setText(encabezado + empleado.toString());
+      
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        
+
     }
-    public boolean contieneDigito(String cadena){
+
+    public boolean contieneDigito(String cadena) {
         boolean containsDigit = false;
 
         if (cadena != null && !cadena.isEmpty()) {
@@ -75,7 +78,53 @@ public class InterfazRegistro extends javax.swing.JFrame {
         }
         return containsDigit;
     }
-   
+    
+    public boolean contieneLetra(String cadena) {
+        boolean containsDigit = false;
+
+        if (cadena != null && !cadena.isEmpty()) {
+            for (char c : cadena.toCharArray()) {
+                if (containsDigit = !Character.isDigit(c)) {
+                    break;
+                    
+                }
+            }
+        }
+        return containsDigit;
+    }
+    
+    public boolean limiteCodigo(String cadena) {
+        boolean lenghtString = false;
+
+        if (cadena != null && !cadena.isEmpty()) {
+            if (cadena.length()!=3){
+                lenghtString = true;                
+            }
+        }
+        return lenghtString;
+    }
+    
+    public boolean limiteNombre(String cadena) {
+        boolean lenghtString = false;
+
+        if (cadena != null && !cadena.isEmpty()) {
+            if (cadena.length() < 3 || cadena.length() > 30){
+                lenghtString = true;                
+            }
+        }
+        return lenghtString;
+    }
+
+    public boolean limiteAntiguedad(String cadena) {
+        boolean valueString = false;
+        int mes = Integer.parseInt(cadena);
+        if (cadena != null && !cadena.isEmpty()) {
+            if (mes > 600 && mes <= 0){
+                valueString = true;   
+            }
+        }
+        return valueString;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -119,6 +168,7 @@ public class InterfazRegistro extends javax.swing.JFrame {
 
         txtCodigo.setFont(new java.awt.Font("Roboto Thin", 0, 11)); // NOI18N
         txtCodigo.setText("Ingrese numero de identidifación");
+        txtCodigo.setToolTipText("");
         txtCodigo.setBorder(null);
         txtCodigo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -134,6 +184,7 @@ public class InterfazRegistro extends javax.swing.JFrame {
         txtNombre.setFont(new java.awt.Font("Roboto Thin", 0, 11)); // NOI18N
         txtNombre.setForeground(new java.awt.Color(51, 51, 51));
         txtNombre.setText("Ingrese nombre del empleado");
+        txtNombre.setToolTipText("");
         txtNombre.setBorder(null);
         txtNombre.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -144,6 +195,7 @@ public class InterfazRegistro extends javax.swing.JFrame {
         txtAntiguedad.setFont(new java.awt.Font("Roboto Thin", 0, 11)); // NOI18N
         txtAntiguedad.setForeground(new java.awt.Color(51, 51, 51));
         txtAntiguedad.setText(" Meses que lleva trabajando");
+        txtAntiguedad.setToolTipText("");
         txtAntiguedad.setBorder(null);
         txtAntiguedad.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -155,7 +207,12 @@ public class InterfazRegistro extends javax.swing.JFrame {
         txtRegistrados.setRows(5);
         jScrollPane1.setViewportView(txtRegistrados);
 
-        jCmbTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0", "1" }));
+        jCmbTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione", "0", "1" }));
+        jCmbTipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCmbTipoActionPerformed(evt);
+            }
+        });
 
         btnRegistrar.setText("Registrar");
         btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
@@ -184,12 +241,9 @@ public class InterfazRegistro extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(30, 30, 30)))))
+                                    .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(30, 30, 30)))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtAntiguedad, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -279,8 +333,12 @@ public class InterfazRegistro extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         registrar();
-        
+
     }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void jCmbTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCmbTipoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCmbTipoActionPerformed
 
     /**
      * @param args the command line arguments

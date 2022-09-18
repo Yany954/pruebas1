@@ -11,52 +11,22 @@ package registroempleados;
  */
 public class Empleado {
     String nombre;
-    int codigo;
-    boolean tipoEmpleado;
-    int meses;
+    String codigo;
+    String tipoEmpleado;
+    String meses;
 
-    public Empleado(String nombre, int codigo, boolean tipoEmpleado, int meses) {
-        this.nombre = nombre;
+    public Empleado(String codigo, String nombre, String tipoEmpleado, String meses) {
         this.codigo = codigo;
-        this.tipoEmpleado = tipoEmpleado;
-        this.meses = meses;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public int getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
-    }
-
-    public boolean isTipoEmpleado() {
-        return tipoEmpleado;
-    }
-
-    public void setTipoEmpleado(boolean tipoEmpleado) {
         this.tipoEmpleado = tipoEmpleado;
-    }
-
-    public int getMeses() {
-        return meses;
-    }
-
-    public void setMeses(int meses) {
         this.meses = meses;
     }
 
     @Override
     public String toString() {
-        return "Empleado{" + "nombre=" + nombre + ", codigo=" + codigo + ", tipoEmpleado=" + tipoEmpleado + ", meses=" + meses + '}';
+        String informacion = codigo + "\t" + nombre + "\t" 
+                + tipoEmpleado + "\t" + meses; 
+        return  informacion;
     }
     
     
