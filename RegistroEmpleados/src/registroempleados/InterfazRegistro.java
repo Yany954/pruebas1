@@ -23,9 +23,9 @@ public class InterfazRegistro extends javax.swing.JFrame {
     
     public void registrar(){
         String nombre=txtNombre.getText();
-        Integer cod=Integer.parseInt(txtCodigo.getText());
-        Integer tipoIndex=(int) jCmbTipo.getSelectedItem();
-        Integer meses = Integer.parseInt(txtAntiguedad.getText());
+        int cod=Integer.parseInt(txtCodigo.getText());
+        int tipoIndex=jCmbTipo.getSelectedIndex();
+        int meses = Integer.parseInt(txtAntiguedad.getText());
         String tipo;
         try{
             if(tipoIndex == 0){
@@ -33,36 +33,73 @@ public class InterfazRegistro extends javax.swing.JFrame {
             }else{
                 tipo="Empleado de termino fijo";
             }
-            if(nombre.isEmpty()){
-                JOptionPane.showMessageDialog(rootPane, "Nombre vacio");
-            }
-            else if(nombre.length()>=30 && nombre.length()<=3){
-                JOptionPane.showMessageDialog(rootPane, "Cantidad de caracteres invalidos");
-            }
-            else if(contieneDigito(nombre)){
-                JOptionPane.showMessageDialog(rootPane, "Nombre contiene algun digito");
-            }
-            /*
+            
             //el if que registra si los campos estan bien
-            if(nombre.length()<=30 && nombre.length()>=3 || !nombre.isEmpty()){
-                if(cod > 000 && cod <= 999 || cod!=null){
-                    if(meses > 0 && meses <= 600 || meses!=null){
-                        String text=cod+"\t"+nombre+"\t"+tipo+"\t"+meses;
-                        txtRegistrados.append(text);
-                    } else{
-                        JOptionPane.showMessageDialog(rootPane, "Tiempo en meses invalido");
-                    }
-                }else{
-                    JOptionPane.showMessageDialog(rootPane, "Codigo invalido");
-                }
-            }else{
-                JOptionPane.showMessageDialog(rootPane, "Nombre invalido");
-            }*/
+            if(nombreBien(nombre)&& codigoBien(cod) && antiguedadBien(meses)){
+                String text="\n"+cod+"\t"+nombre+"\t"+tipo+"\t"+meses+"\t";
+                txtRegistrados.append(text);
+            }
         } catch(Exception e){
             JOptionPane.showMessageDialog(rootPane, e.getMessage());
         }
         
     }
+    public boolean nombreBien(String cadena){
+       
+        if(!cadena.isEmpty()){
+            if(cadena!=null){
+                
+            
+                if(cadena.length()<=30 && cadena.length()>=3){
+                    if(contieneDigito(cadena)==false){
+                        return true;
+                    }else{
+                        JOptionPane.showMessageDialog(rootPane, "Cadena contienen numeros");
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(rootPane, "Cantidad de caracteres invalidos");
+                }
+            } else{
+                JOptionPane.showMessageDialog(rootPane, "Nombre invalido");
+            }
+            }else{
+                JOptionPane.showMessageDialog(rootPane, "Ingresar nombre");
+            }
+        return false;
+        
+    }
+    public boolean codigoBien(int codigo){
+        try{
+            if(codigo > 000 && codigo <= 999){
+                if(Integer.toString(codigo).length()!=3){
+                    return true;
+                }else{
+                    JOptionPane.showMessageDialog(null, "Cantidad de digitos invalido\n Recuerde que deben ser 3 digitos");
+                }
+                    
+            }else{
+                    JOptionPane.showMessageDialog(null, "Codigo invalido\n Recuerde que deben ser digitos del 001 al 999");
+            }
+        } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Ingresar algun codigo", "Error", JOptionPane.ERROR_MESSAGE);
+                
+        }
+        return false;
+    }
+    public boolean antiguedadBien(int meses){
+        try{
+            if(meses > 0 && meses<=600){
+                return true;
+            }else{
+                JOptionPane.showMessageDialog(null, "Cantidad de meses invalido\n Recuerde que deben ser de 1 al 600 meses");
+            }
+        } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Ingresar cantidad de meses que lleva trabajando en la empresa", "Error", JOptionPane.ERROR_MESSAGE);
+                
+        }
+        return false;
+    }
+    
     public boolean contieneDigito(String cadena){
         boolean containsDigit = false;
 
