@@ -23,6 +23,7 @@ public class InterfazRegistro extends javax.swing.JFrame {
 
     public void registrar() {
         try {
+            boolean verificado = false;
             String nombre = txtNombre.getText();
             String cod = txtCodigo.getText();
             int tipoIndex = jCmbTipo.getSelectedIndex();
@@ -37,7 +38,8 @@ public class InterfazRegistro extends javax.swing.JFrame {
             }else if ("Ingrese nombre del empleado".equals(nombre)
                     || nombre.isEmpty()){
                 JOptionPane.showMessageDialog(rootPane, "Nombre vacío");
-            }else if (contieneDigito(nombre) || limiteNombre(nombre)){
+            }else if (contieneDigito(nombre) || limiteNombre(nombre)
+                     || nombre.equals("null")){
                 JOptionPane.showMessageDialog(rootPane, "Nombre incorrecto "
                         + "\n" + "Letras entre 3 y 30 \n" + "Sin números");
             }else if (tipoIndex == 0){
@@ -45,10 +47,12 @@ public class InterfazRegistro extends javax.swing.JFrame {
             }else if (" Meses que lleva trabajando".equals(meses)
                     || meses.isEmpty()){
                 JOptionPane.showMessageDialog(rootPane, "Antigüedad vacía");
-            }else if (contieneLetra(cod) 
-                    || limiteAntiguedad(cod)){
+            }else if (contieneLetra(meses) 
+                    || limiteAntiguedad(meses)){
                 JOptionPane.showMessageDialog(rootPane, "Antigüedad incorrecta "
                         + "\n" + "valores entre 1 y 600");
+            }else{
+                verificado = true;
             }                     
                   
             String tipo = "";
@@ -57,8 +61,12 @@ public class InterfazRegistro extends javax.swing.JFrame {
             } else if(tipoIndex == 2){
                 tipo = "Termino fijo";
             }
-            Empleado empleado = new Empleado(cod, nombre, tipo, meses);
-            txtRegistrados.setText(encabezado + empleado.toString());
+            
+            while (verificado){
+                Empleado empleado = new Empleado(cod, nombre, tipo, meses);
+                txtRegistrados.append(empleado.toString() + "\n");
+                verificado = false;
+            }
       
         } catch (Exception e) {
             System.out.println(e.getMessage());
