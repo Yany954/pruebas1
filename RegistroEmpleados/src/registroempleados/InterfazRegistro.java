@@ -34,7 +34,7 @@ public class InterfazRegistro extends javax.swing.JFrame {
             }else if (contieneLetra(cod) 
                     || limiteCodigo(cod)){
                 JOptionPane.showMessageDialog(rootPane, "Código incorrecto "
-                        + "\n" + "valores entre 001 y 999");
+                        + "\n" + "valores entre 001 y 999\n" + "Sin letras");
             }else if ("Ingrese nombre del empleado".equals(nombre)
                     || nombre.isEmpty()){
                 JOptionPane.showMessageDialog(rootPane, "Nombre vacío");
@@ -104,11 +104,10 @@ public class InterfazRegistro extends javax.swing.JFrame {
     public boolean limiteCodigo(String cadena) {
         boolean lenghtString = false;
 
-        if (cadena != null && !cadena.isEmpty()) {
-            if (cadena.length()!=3){
+        if (cadena.length()!=3){
                 lenghtString = true;                
             }
-        }
+        
         return lenghtString;
     }
     
